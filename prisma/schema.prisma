@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. DEFINIMOS EL ENUM PARA LOS ROLES A NIVEL DE BASE DE DATOS
+// Esto asegura que solo estos valores puedan ser guardados.
+enum Role {
+  USER
+  SUPERADMIN
+}
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+  password String // Necesitaremos esto para la autenticación
+
+  // 2. AÑADIMOS EL CAMPO 'role' AL USUARIO
+  role  Role    @default(USER)
+
+  // 3. AÑADIMOS LA RELACIÓN INVERSA HACIA PROYECTOS
+  projects Project[]
+}
+
+// 4. RENOMBRAMOS 'Post' A 'Project' Y AJUSTAMOS SUS CAMPOS
+model Project {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  title       String
+  description String?
+  published   Boolean  @default(false)
+
+  // 5. DEFINIMOS LA RELACIÓN CON EL AUTOR (USUARIO)
+  author   User @relation(fields: [authorId], references: [id])
+  authorId Int
+}
