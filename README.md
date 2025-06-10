@@ -129,7 +129,7 @@ Consulta el archivo [`queries.graphql`](./queries.graphql) para ejemplos de toda
 
 ## Despliegue
 
-Puedes desplegar este proyecto fácilmente en [Render](https://render.com/), [Railway](https://railway.app/), [Vercel](https://vercel.com/) o [Heroku](https://heroku.com/).
+Puedes ver el despliegue con playgorund aqui: [https://graphql-nexus.onrender.com](https://graphql-nexus.onrender.com)
 
 ---
 

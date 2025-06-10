@@ -22,21 +22,6 @@ mutation LoginUser {
   }
 }
 
-# ---------- Crear usuarios con rol (solo superadmin) ----------
-
-mutation CreateUserWithRole {
-  createUserWithRole(
-    email: "user@mail.com",
-    password: "userpass",
-    name: "User",
-    role: "usuario"
-  ) {
-    id
-    email
-    role
-  }
-}
-
 # ---------- CRUD de Usuarios (solo superadmin) ----------
 
 mutation UpdateUser {
