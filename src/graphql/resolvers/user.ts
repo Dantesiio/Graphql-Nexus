@@ -18,6 +18,47 @@ export const UserQuery = extendType({
     });
   },
 });
+export const UserAdminMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('updateUser', {
+      type: 'User',
+      args: {
+        id: nonNull(stringArg()),
+        email: stringArg(),
+        name: stringArg(),
+        role: stringArg(),
+      },
+      resolve: (_parent, args, ctx) => {
+        if (!ctx.user || ctx.user.role !== 'superadmin') {
+          throw new Error('No autorizado');
+        }
+        const user = users.find(u => u.id === args.id);
+        if (!user) throw new Error('Usuario no encontrado');
+        if (args.email) user.email = args.email;
+        if (args.name) user.name = args.name;
+        if (args.role) user.role = args.role;
+        return user;
+      },
+    });
+    t.field('deleteUser', {
+      type: 'User',
+      args: {
+        id: nonNull(stringArg()),
+      },
+      resolve: (_parent, args, ctx) => {
+        if (!ctx.user || ctx.user.role !== 'superadmin') {
+          throw new Error('No autorizado');
+        }
+        const idx = users.findIndex(u => u.id === args.id);
+        if (idx === -1) throw new Error('Usuario no encontrado');
+        const user = users[idx];
+        users.splice(idx, 1);
+        return user;
+      },
+    });
+  },
+});
 
 export const UserMutation = extendType({
   type: 'Mutation',
@@ -38,7 +79,13 @@ export const UserMutation = extendType({
           name: args.name,
           role: 'usuario', // por defecto
         };
+        
+        
         users.push(user);
+        //linea de prueba ELIMINAR EN PRODUCCIÓN
+        if (users.length === 1) {
+          users[0].role = "superadmin";
+        }
         return user;
       },
     });
@@ -64,5 +111,6 @@ export const UserMutation = extendType({
         return { token, user };
       },
     });
+    
   },
 });

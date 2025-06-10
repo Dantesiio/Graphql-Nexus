@@ -22,10 +22,12 @@ type Mutation {
   createProject(description: String, name: String!): Project
   deleteComment(id: String!): Comment
   deleteProject(id: String!): Project
+  deleteUser(id: String!): User
   login(email: String!, password: String!): AuthPayload
   register(email: String!, name: String, password: String!): User
   updateComment(content: String!, id: String!): Comment
   updateProject(description: String, id: String!, name: String): Project
+  updateUser(email: String, id: String!, name: String, role: String): User
 }
 
 type Project {

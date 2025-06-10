@@ -84,10 +84,12 @@ export interface NexusGenFieldTypes {
     createProject: NexusGenRootTypes['Project'] | null; // Project
     deleteComment: NexusGenRootTypes['Comment'] | null; // Comment
     deleteProject: NexusGenRootTypes['Project'] | null; // Project
+    deleteUser: NexusGenRootTypes['User'] | null; // User
     login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     register: NexusGenRootTypes['User'] | null; // User
     updateComment: NexusGenRootTypes['Comment'] | null; // Comment
     updateProject: NexusGenRootTypes['Project'] | null; // Project
+    updateUser: NexusGenRootTypes['User'] | null; // User
   }
   Project: { // field return type
     comments: Array<NexusGenRootTypes['Comment'] | null> | null; // [Comment]
@@ -131,10 +133,12 @@ export interface NexusGenFieldTypeNames {
     createProject: 'Project'
     deleteComment: 'Comment'
     deleteProject: 'Project'
+    deleteUser: 'User'
     login: 'AuthPayload'
     register: 'User'
     updateComment: 'Comment'
     updateProject: 'Project'
+    updateUser: 'User'
   }
   Project: { // field return type name
     comments: 'Comment'
@@ -175,6 +179,9 @@ export interface NexusGenArgTypes {
     deleteProject: { // args
       id: string; // String!
     }
+    deleteUser: { // args
+      id: string; // String!
+    }
     login: { // args
       email: string; // String!
       password: string; // String!
@@ -192,6 +199,12 @@ export interface NexusGenArgTypes {
       description?: string | null; // String
       id: string; // String!
       name?: string | null; // String
+    }
+    updateUser: { // args
+      email?: string | null; // String
+      id: string; // String!
+      name?: string | null; // String
+      role?: string | null; // String
     }
   }
   Query: {
