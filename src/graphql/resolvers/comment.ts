@@ -1,5 +1,5 @@
 import { extendType, stringArg, nonNull } from 'nexus';
-
+import { projects } from './project'; 
 // Simulación de base de datos en memoria
 export const comments: any[] = [];
 
@@ -33,6 +33,9 @@ export const CommentMutation = extendType({
       },
       resolve: (_parent, args, ctx) => {
         if (!ctx.user) throw new Error('No autenticado');
+        if (!args.content.trim()) throw new Error('El contenido no puede estar vacío');
+        const project = projects.find(p => p.id === args.projectId);
+        if (!project) throw new Error('Proyecto no encontrado');
         const comment = {
           id: `${comments.length + 1}`,
           content: args.content,
@@ -55,10 +58,10 @@ export const CommentMutation = extendType({
         if (!ctx.user) throw new Error('No autenticado');
         const comment = comments.find(c => c.id === args.id);
         if (!comment) throw new Error('Comentario no encontrado');
-        // Solo el autor o superadmin puede editar
         if (comment.authorId !== ctx.user.id && ctx.user.role !== 'superadmin') {
           throw new Error('No autorizado');
         }
+        if (!args.content.trim()) throw new Error('El contenido no puede estar vacío');
         comment.content = args.content;
         return comment;
       },
@@ -74,7 +77,6 @@ export const CommentMutation = extendType({
         const idx = comments.findIndex(c => c.id === args.id);
         if (idx === -1) throw new Error('Comentario no encontrado');
         const comment = comments[idx];
-        // Solo el autor o superadmin puede borrar
         if (comment.authorId !== ctx.user.id && ctx.user.role !== 'superadmin') {
           throw new Error('No autorizado');
         }

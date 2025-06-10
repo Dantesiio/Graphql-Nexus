@@ -2,6 +2,7 @@ import { extendType, stringArg, nonNull, objectType } from 'nexus';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+
 // Simulación de base de datos en memoria
 export const users: any[] = [];
 
