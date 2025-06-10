@@ -1,0 +1,181 @@
+# queries.graphql
+
+# ---------- Registro y Login ----------
+
+mutation RegisterUser {
+  register(email: "admin@mail.com", password: "1234", name: "Admin") {
+    id
+    email
+    name
+    role
+  }
+}
+
+mutation LoginUser {
+  login(email: "admin@mail.com", password: "1234") {
+    token
+    user {
+      id
+      email
+      role
+    }
+  }
+}
+
+# ---------- Crear usuarios con rol (solo superadmin) ----------
+
+mutation CreateUserWithRole {
+  createUserWithRole(
+    email: "user@mail.com",
+    password: "userpass",
+    name: "User",
+    role: "usuario"
+  ) {
+    id
+    email
+    role
+  }
+}
+
+# ---------- CRUD de Usuarios (solo superadmin) ----------
+
+mutation UpdateUser {
+  updateUser(id: "2", email: "nuevo@mail.com", name: "Nuevo", role: "usuario") {
+    id
+    email
+    name
+    role
+  }
+}
+
+mutation DeleteUser {
+  deleteUser(id: "2") {
+    id
+    email
+    name
+  }
+}
+
+# ---------- CRUD de Proyectos ----------
+
+mutation CreateProject {
+  createProject(name: "Proyecto 1", description: "Mi primer proyecto") {
+    id
+    name
+    description
+    ownerId
+  }
+}
+
+mutation UpdateProject {
+  updateProject(id: "1", name: "Proyecto actualizado", description: "Nueva descripción") {
+    id
+    name
+    description
+  }
+}
+
+mutation DeleteProject {
+  deleteProject(id: "1") {
+    id
+    name
+  }
+}
+
+# ---------- CRUD de Comentarios ----------
+
+mutation CreateComment {
+  createComment(content: "¡Gran proyecto!", projectId: "1") {
+    id
+    content
+    author {
+      id
+      name
+    }
+    project {
+      id
+      name
+    }
+  }
+}
+
+mutation UpdateComment {
+  updateComment(id: "1", content: "Comentario editado") {
+    id
+    content
+  }
+}
+
+mutation DeleteComment {
+  deleteComment(id: "1") {
+    id
+    content
+  }
+}
+
+# ---------- Consultas con Fragments ----------
+
+fragment UserFields on User {
+  id
+  email
+  name
+  role
+  projects {
+    id
+    name
+  }
+  comments {
+    id
+    content
+  }
+}
+
+query GetUsers {
+  users {
+    ...UserFields
+  }
+}
+
+fragment ProjectFields on Project {
+  id
+  name
+  description
+  owner {
+    id
+    name
+  }
+  comments {
+    id
+    content
+    author {
+      id
+      name
+    }
+  }
+}
+
+query GetProjects {
+  projects {
+    ...ProjectFields
+  }
+}
+
+fragment CommentFields on Comment {
+  id
+  content
+  createdAt
+  author {
+    id
+    name
+  }
+  project {
+    id
+    name
+  }
+}
+
+query GetComments {
+  comments {
+    ...CommentFields
+  }
+}
