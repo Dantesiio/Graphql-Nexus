@@ -21,7 +21,7 @@ export const ProjectQuery = extendType({
 export const ProjectMutation = extendType({
   type: 'Mutation',
   definition(t) {
-    t.field('createProject', {
+   t.field('createProject', {
       type: 'Project',
       args: {
         name: nonNull(stringArg()),
@@ -29,6 +29,7 @@ export const ProjectMutation = extendType({
       },
       resolve: (_parent, args, ctx) => {
         if (!ctx.user) throw new Error('No autenticado');
+        if (!args.name.trim()) throw new Error('El nombre del proyecto es obligatorio');
         const project = {
           id: `${projects.length + 1}`,
           name: args.name,
@@ -54,6 +55,7 @@ export const ProjectMutation = extendType({
         if (ctx.user.role !== 'superadmin' && project.ownerId !== ctx.user.id) {
           throw new Error('No autorizado');
         }
+        if (args.name && !args.name.trim()) throw new Error('El nombre no puede estar vacío');
         if (args.name) project.name = args.name;
         if (args.description) project.description = args.description;
         return project;
