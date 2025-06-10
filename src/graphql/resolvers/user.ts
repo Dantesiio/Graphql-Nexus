@@ -14,6 +14,9 @@ export const UserQuery = extendType({
       type: 'User',
       resolve: (_parent, _args, ctx) => {
         if (!ctx.user) throw new Error('No autenticado');
+        if (ctx.user.role !== 'superadmin' && ctx.user.role !== 'admin') {
+          throw new Error('No autorizado');
+        }
         return users;
       },
     });
